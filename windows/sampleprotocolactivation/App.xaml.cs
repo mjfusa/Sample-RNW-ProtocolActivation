@@ -1,4 +1,5 @@
 ﻿using Microsoft.ReactNative;
+using Microsoft.ReactNative.Managed;
 using System.Diagnostics;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
@@ -6,8 +7,11 @@ using Windows.UI.Xaml.Controls;
 
 namespace sampleprotocolactivation
 {
+
     sealed partial class App : ReactApplication
     {
+        public ReactContext _reactContext { get; private set; }
+
         public App()
         {
 #if BUNDLE
@@ -68,11 +72,21 @@ namespace sampleprotocolactivation
                 if (e.Kind == ActivationKind.Protocol)
                 {
                     ProtocolActivatedEventArgs eventArgs = e as ProtocolActivatedEventArgs;
-                    Debug.WriteLine($"{eventArgs.Uri.ToString() }");
+                    var destination = eventArgs.Uri.AbsolutePath.Replace("/", "");
+                    Debug.WriteLine($"{ destination }");
+
+                    //.CallJSFunction("sampleprotocolactivation","navigateto", destination);
+
+                    
+                    //ReactN
+                    //rns.Notifications.SendNotification("NavigationDesination", null, destination);
+
                     // TODO: Handle URI activation
                     // The received URI is eventArgs.Uri.AbsoluteUri
                 }
             }
         }
+    
+
     }
 }
